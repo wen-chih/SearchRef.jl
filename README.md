@@ -9,7 +9,7 @@ DEA is a linear program (LP)-based method used to determine a firm’s relative 
 ## Example
 
 ```julia
-# The example determine the efficiencies for all DMUs based on the VRS input-oriented model (VRS model)
+# The example determines the efficiencies for all DMUs based on the VRS input-oriented model (VRS model)
 using Gurobi
 include("SearchRef.jl")
 
