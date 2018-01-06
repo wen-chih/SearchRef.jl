@@ -29,7 +29,6 @@ for k = 1:scale
 end
 ```
 
-<br>
 
 ## Parameters
 
@@ -81,7 +80,7 @@ end
 	SearchRef(k, dataMatrix, numInput, env, extremeValueSet = aSet) 
 	# aSet is Vector{Int} containing indices of DMUs with extreme values 
 
-<br>
+
 
 ## Citation
 If you find FrontierEfficiencyAnalysis useful in your work, we kindly request that you cite the following papers
