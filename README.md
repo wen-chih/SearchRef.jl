@@ -69,18 +69,19 @@ end
 	SearchRef(k, dataMatrix, numInput, env, maxIteration = 100) # set maxIteration = 100
 
 >    
-**initialSampling** the initial sampling policy: can be "random" or "extreme value"), which will select DMUs with extreme values on each dimension (default value: "random").
+**initialSampling** : the initial sampling policy: can be "random" or "extreme value"), which will select DMUs with extreme values on each dimension (default value: "random").
 <br>
 
 	SearchRef(k, dataMatrix, numInput, env, initialSampling = "extreme value") 
 
 >
-**extremeValueSet** the index set of DMUs with extreme vale for each dimension (default is empty).
+**extremeValueSet** : the index set of DMUs with extreme vale for each dimension (default is empty).
 <br>
 
 	SearchRef(k, dataMatrix, numInput, env, extremeValueSet = aSet) 
 	# aSet is Vector{Int} containing indices of DMUs with extreme values 
 
+<br>
 
 ## Citation
 If you find FrontierEfficiencyAnalysis useful in your work, we kindly request that you cite the following papers
