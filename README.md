@@ -13,7 +13,7 @@ DEA is a linear program (LP)-based method used to determine a firm’s relative 
 using Gurobi
 include("SearchRef.jl")
 
-dataPath = "5-2-100k_01.csv" # input-output data source
+dataPath = "data.csv" # input-output data source
 
 dataMatrix = readcsv(dataPath)
 scale, dimension = size(dataMatrix)
