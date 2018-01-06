@@ -1,7 +1,7 @@
 # SearchRef.jl
 #### Copyright © 2018 by Wen-Chih Chen.  Released under the MIT License.
 
-SearchRef.jl is a Julia package for Frontier Efficiency Analysis (aka Data Envelopment Analysis, DEA) computation. 
+SearchRef.jl is a Julia package for Frontier Efficiency Analysis (aka Data Envelopment Analysis, DEA) computation. It is desiged to enhance the large-scale DEA computation. It is the implementation of the algorithm presented in "A reference-searching–based algorithm for large-scale data envelopment analysis computation", and currently it solves the input-oriented VRS model. 
 
 ## Usage
 DEA is a linear program (LP)-based method used to determine a firm’s relative efficiency.
@@ -89,19 +89,7 @@ end
 ## Citation
 If you find FrontierEfficiencyAnalysis useful in your work, we kindly request that you cite the following papers
 
-	@article{ChenLai2017,
-	author = {Wen-Chih Chen and Sheng-Yung Lai},
-	title = {Determining radial efficiency with a large data set by solving small-size linear programs},
-	journal = {Annals of Operations Research},
-	volume = {250},
-	number = {1},
-	pages = {147-166},
-	year = {2017},
-	doi = {10.1007/s10479-015-1968-4},
-	}
-and
-
-	@misc{chen2017a,
+	@misc{chen2017,
 	Author = {Wen-Chih Chen},
 	Title = {A reference-searching–based algorithm for large-scale data envelopment analysis computation},
 	Year = {2017},
