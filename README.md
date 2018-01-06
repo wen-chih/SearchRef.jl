@@ -78,7 +78,8 @@ end
 **extremeValueSet** the index set of DMUs with extreme vale for each dimension (default is empty).
 <br>
 
-	SearchRef(k, dataMatrix, numInput, env, extremeValueSet = aSet) # aSet is Vector{Int} containing indices of DMUs with extreme values 
+	SearchRef(k, dataMatrix, numInput, env, extremeValueSet = aSet) 
+	# aSet is Vector{Int} containing indices of DMUs with extreme values 
 
 
 ## Citation
