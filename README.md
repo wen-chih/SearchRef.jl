@@ -1,57 +1,33 @@
 # SearchRef.jl
 #### Copyright © 2018 by Wen-Chih Chen.  Released under the MIT License.
 
-SearchRef.jl is a Julia package for Frontier Efficiency Analysis (aka Data Envelopment Analysis, DEA) computation. It is desiged to enhance the large-scale DEA computation. It is the implementation of the algorithm presented in "A reference-searching–based algorithm for large-scale data envelopment analysis computation", and currently it solves the input-oriented VRS model. 
+SearchRef.jl is a Julia package for Frontier Efficiency Analysis (aka Data Envelopment Analysis, DEA) computation. It is desiged to enhance the large-scale DEA computation. It is the implementation of the algorithm presented in "[A reference-searching–based algorithm for large-scale data envelopment analysis computation](https://arxiv.org/abs/1710.10482/)". Currently, it solves the input-oriented VRS model. 
 
 ## Usage
 DEA is a linear program (LP)-based method used to determine a firm’s relative efficiency.
 
 ## Example
 
-
 ```julia
-# The example determine the efficiencies for all DMUs based on the CRS input-oriented model (CCR model)
-using JuMP
-using Gurobi # Gurobi is used as the LP solver
-using FrontierEfficiencyAnalysis
+# The example determine the efficiencies for all DMUs based on the VRS input-oriented model (VRS model)
+using Gurobi
+include("SearchRef.jl")
 
-data = readcsv("example.csv") # input User's (.csv) data path
-scale, dimension = size(data) # scale is the number of DMU, dimension is the total number of inputs and outputs
+dataPath = "5-2-100k_01.csv" # input-output data source
 
-for t = 1 : scale
-    ### Modeling section
-    # Here is the CRS input-oriented model (CCR model) to evaluate DMU t
-    model = Model(solver = GurobiSolver()) # Gurobi is used as the LP solver here. Users can choose their favorite solver.
-    @variable(model, Lambda[1:scale] >= 0)
-    @variable(model, Theta)
-    @objective(model, Min, Theta)
-    @constraint(model, inputCon[i=1:2], sum(Lambda[r]*data[r,i] for r = 1:scale) <= Theta*data[t,i])
-    @constraint(model, outputCon[j=3:dimension], sum(Lambda[r]*data[r,j] for r = 1:scale) >= data[t,j])
-    # uncomment to add the convexity constraint for the VRS model
-    # @constraint(model, sum(Lambda[r] for r = 1:scale) == 1)
+dataMatrix = readcsv(dataPath)
+scale, dimension = size(dataMatrix)
+numInput = 2 # the first two columns are inputs and the others are outputs
 
-    ### Problem solving
-    solveDEA(model)
+GurobiTol = 10.0^-6
+efficiency = 0.0
+iterNum = 0
+ 
+env = Gurobi.Env()
+setparams!(env; OutputFlag=0, OptimalityTol=GurobiTol) 
 
-    ### Display
-    println("Results for DMU $t")
-    println("The efficicncy: $(getobjectivevalue(model))")
-    println("The efficicncy: $(getvalue(Theta))")
-    println("The lambdas: $(getvalue(Lambda)))")
-
-
-    ## Use the following if returning dual values and slacks is needed
-
-    ### Problem solving
-    # duals, slacks = solveDEA(model)
-    ### Display
-    # println("Results for DMU $t")
-    # println("The efficicncy: $(getobjectivevalue(model))")
-    # println("The efficicncy: $(getvalue(Theta))")
-    # println("The lambdas: $(getvalue(Lambda)))")
-
-    # #println("The dual values (weights): $duals") # a vector associated with the constraints you define from the top to the bottom
-    # println("the slack values: $slacks") # a vector associated with the constraints you define from the top to the bottom
+for k = 1:scale
+    efficiency, iterNum, extremeValueSet = SearchRef(k, dataMatrix, numInput, env)
 end
 ```
 
