@@ -1,5 +1,5 @@
-# for Chen, W.C. "A reference-searching–based algorithm for large-scale data envelopment analysis computation".
-# solving input-oriented VRS model
+# code for Chen, W.C. "A reference-searching–based algorithm for large-scale data envelopment analysis computation".
+# solving input-oriented VRS models
 
 using Gurobi
 # include("functions.jl")
