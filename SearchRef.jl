@@ -394,3 +394,105 @@ function swapSample!(p::Vector{Int64}, q::Vector{Int64}, i::Int64, j::Int64)
   p[i] = q[j]
   q[j] = temp
 end
+
+# largestn: getting the top n largest elements in vector v
+function largestn(v::Vector{Float64}, n::Int64)
+  # function getBigger(v::Vector{Float64}, n::Int)
+  # parameters
+  # input
+  # v: the vector which is sorted to find top n largest elements
+  # n: the number of elements which have to be finded from vector v
+  # output
+  # biggerIdx: top n largest elements, which are the indices w.r.t the vector v
+  # biggerValue: values of top n largest elements
+
+  # initialization
+  biggerValue = v[1:n]  # the top n largest value in vector v
+  biggerIdx = collect(1:n) # the top n largest elements in vector v
+
+  minValue, minIdx = findmin(biggerValue)
+
+  for i = n+1:length(v)
+    if v[i] > minValue
+      biggerValue[minIdx] = v[i]
+      biggerIdx[minIdx] = i
+
+      minValue, minIdx = findmin(biggerValue)
+    end
+  end
+
+  return biggerValue, biggerIdx
+end
+
+# smallestn: getting the top n smallest elements in vector v
+function smallestn(v::Vector{Float64}, n::Int64)
+  # parameters
+  # input
+  # v: the vector which is sorted to find top n smallest elements
+  # n: the number of elements which have to be finded from vector v
+  # output
+  # smallerIdx: top n smallest elements, which are the indices w.r.t the vector v
+  # smallerValue: values of top n smallest elements
+
+  # initialization
+  smallerValue = v[1:n] # the top n smallest value in vector v
+  smallerIdx = collect(1:n) # the top n smallest elements in vector v
+
+  maxValue, maxIdx = findmax(smallerValue)
+
+  for i = n+1:length(v)
+    if v[i] < maxValue
+      smallerValue[maxIdx] = v[i]
+      smallerIdx[maxIdx] = i
+
+      maxValue, maxIdx = findmax(smallerValue)
+    end
+  end
+
+  return smallerValue, smallerIdx
+end
+
+# divide output as sample and nonsample
+function get2Sets!(output::Vector{Int64}, sampleSize::Int64, k::Int64, aSet::Vector{Int64})
+  # aSet is the default set including target MDU should be sorted
+  # if length(aSet) < sampleSize, rest sample elements are randomly generated
+  # the first sampleSize elements are sample; the others are nonsample
+  temp = 0
+  for pt = 1:sampleSize
+    if pt <= length(aSet) # get element from sample
+      next = aSet[pt]
+    else # get element randomly
+      next = rand(pt:sampleSize)
+    end
+    # swap (noting in the sample)
+    temp = output[pt]
+    output[pt] = output[next]
+    output[next] = temp
+  end
+
+  # move k to the first
+  a = find(output[1:length(aSet)] .== k)
+  temp = output[a][1] # a is a Vector
+  output[a[1]] = output[1]
+  output[1] = temp
+end
+
+# divide output as sample and nonsample
+function get2Sets!(output::Vector{Int64}, sampleSize::Int64, aSet::Vector{Int64})
+  # aSet is the default set including target MDU should be sorted
+  # if length(aSet) < sampleSize, rest sample elements are randomly generated
+  # the first sampleSize elements are sample; the others are nonsample
+  temp = 0
+  for pt = 1:sampleSize
+    if pt <= length(aSet) # get element from sample
+      next = aSet[pt]
+    else # get element randomly
+      next = rand(pt:sampleSize)
+    end
+    # swap (noting in the sample)
+    temp = output[pt]
+    output[pt] = output[next]
+    output[next] = temp
+  end
+end
+
