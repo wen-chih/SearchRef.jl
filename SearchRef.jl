@@ -169,7 +169,7 @@ function SearchRef(k::Int64, dataMatrix::Matrix{Float64}, numInput::Int, env::Gu
 
     dataMatrix[k, :] = originK
 
-    return  realObjValue, iterations, extremeValueSet
+    return  realObjValue, extremeValueSet
 end
 
 # ==============================================================================
