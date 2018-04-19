@@ -4,7 +4,7 @@
 SearchRef.jl is a Julia package for Frontier Efficiency Analysis (aka Data Envelopment Analysis, DEA) computation. In particular, it determines a firm’s relative efficiency. SearchRef.jl is desiged to enhance the large-scale DEA computation. The theoretical foundation can be found in the paper: [A reference-searching–based algorithm for large-scale data envelopment analysis computation](https://arxiv.org/abs/1710.10482/). Currently, it solves the input-oriented VRS model. 
 
 ## Requirements
-SearchRef.jl requires Gurobi 7.0 solver.
+SearchRef.jl requires Gurobi solver.
 
 ## Example
 
