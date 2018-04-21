@@ -63,7 +63,7 @@ end
 	SearchRef(k, dataMatrix, numInput, env, initialSize = 300) # set the size of the initial sample to be 300 
 
 >
-**M** : a posive-value parameter to avoid the degenercy (default value: 10).
+**M** : a posive-value parameter to avoid the degenercy (default value: 10). Note that M>1 yields loss in numerical accuracy of the efficiency determination. For example, M=10 and tol=10^-6 give accuracy of 10^-5.
 <br>
 
 	SearchRef(k, dataMatrix, numInput, env, M = 5) # set M = 5
