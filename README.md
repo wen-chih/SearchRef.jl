@@ -29,11 +29,11 @@ for k = 1:scale
 end
 
 # The following can give better performance.
-#eSet = Array{Int64}(0)
-#for k = 1:scale
-#    efficiency, eSet = SearchRef(k, dataMatrix, numInput, env, extremeValueSet=eSet, initialSampling = "extreme value")
-#    # k: DMU (row) k of the dataMatrix
-#end
+# eSet = Array{Int64}(0)
+# for k = 1:scale
+#     efficiency, eSet = SearchRef(k, dataMatrix, numInput, env, extremeValueSet=eSet, initialSampling = "extreme value")
+#     # k: DMU (row) k of the dataMatrix
+# end
 ```
 
 
