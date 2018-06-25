@@ -172,22 +172,91 @@ function SearchRef(k::Int64, dataMatrix::Matrix{Float64}, numInput::Int, env::Gu
     return  realObjValue, extremeValueSet
 end
 
-# ==============================================================================
 # a macro of gurobi c call function
 macro grb_ccall(func, args...)
     f = "GRB$(func)"
     args = map(esc,args)
 
-    is_windows() && VERSION < v"0.6-" && return quote
+    # we only maintain the version of gurobi that higher than 7.0.0
+    aliases = ["gurobi80","gurobi79","gurobi75","gurobi70"]
+
+    libgurobi_Version_index = 5
+    substr = [i for i in (split(ENV["GUROBI_HOME"], '\\'))]
+    for i in substr
+      if contains(i, "gurobi")
+        libgurobi_Version_index = findfirst(aliases .== i[1:8])
+        break
+      end
+    end
+
+    # for unix
+    is_unix() && (libgurobi_Version_index == 1) && return quote
+        ccall(($f,:gurobi80), $(args...))
+    end
+    is_unix() && (libgurobi_Version_index == 2) && return quote
+        ccall(($f,:gurobi79), $(args...))
+    end
+    is_unix() && (libgurobi_Version_index == 3) && return quote
+        ccall(($f,:gurobi75), $(args...))
+    end
+    is_unix() && (libgurobi_Version_index == 4) && return quote
+        ccall(($f,:gurobi70), $(args...))
+    end
+    is_unix() && (libgurobi_Version_index == 5) && return quote
+        error("Your gurobi library VERSION is no longer supported.")
+    end
+
+    # for windows
+    is_windows() && VERSION < v"0.6-" && (libgurobi_Version_index == 1) && return quote
+        ccall(($f,:gurobi80), stdcall, $(args...))
+    end
+    is_windows() && VERSION < v"0.6-" && (libgurobi_Version_index == 2) && return quote
+        ccall(($f,:gurobi79), stdcall, $(args...))
+    end
+    is_windows() && VERSION < v"0.6-" && (libgurobi_Version_index == 3) && return quote
+        ccall(($f,:gurobi75), stdcall, $(args...))
+    end
+    is_windows() && VERSION < v"0.6-" && (libgurobi_Version_index == 4) && return quote
         ccall(($f,:gurobi70), stdcall, $(args...))
     end
-    is_windows() && VERSION >= v"0.6-" && return quote
+    is_windows() && VERSION < v"0.6-" && (libgurobi_Version_index == 5) && return quote
+        error("Your gurobi library VERSION is no longer supported.")
+    end
+
+    # for windows with the newest julia version
+    is_windows() && VERSION >= v"0.6-" && (libgurobi_Version_index == 1) && return quote
+        ccall(($f,:gurobi80), $(esc(:stdcall)), $(args...))
+    end
+    is_windows() && VERSION >= v"0.6-" && (libgurobi_Version_index == 2) && return quote
+        ccall(($f,:gurobi79), $(esc(:stdcall)), $(args...))
+    end
+    is_windows() && VERSION >= v"0.6-" && (libgurobi_Version_index == 3) && return quote
+        ccall(($f,:gurobi75), $(esc(:stdcall)), $(args...))
+    end
+    is_windows() && VERSION >= v"0.6-" && (libgurobi_Version_index == 4) && return quote
         ccall(($f,:gurobi70), $(esc(:stdcall)), $(args...))
     end
-    is_unix() && return quote
-        ccall(($f,libgurobi), $(args...))
+    is_windows() && VERSION >= v"0.6-" && (libgurobi_Version_index == 5) && return quote
+        error("Your gurobi library VERSION is no longer supported.")
     end
 end
+
+# # ==============================================================================
+# # a macro of gurobi c call function
+# macro grb_ccall(func, args...)
+#     f = "GRB$(func)"
+#     args = map(esc,args)
+#
+#     is_windows() && VERSION < v"0.6-" && return quote
+#         ccall(($f,:gurobi80), stdcall, $(args...))
+#     end
+#     is_windows() && VERSION >= v"0.6-" && return quote
+#         ccall(($f,:gurobi80), $(esc(:stdcall)), $(args...))
+#     end
+#     is_unix() && return quote
+#         ccall(($f,libgurobi), $(args...))
+#     end
+# end
 
 # add_vars!: adding variables to exist constraints
 # call c function
@@ -495,4 +564,3 @@ function get2Sets!(output::Vector{Int64}, sampleSize::Int64, aSet::Vector{Int64}
     output[next] = temp
   end
 end
-
