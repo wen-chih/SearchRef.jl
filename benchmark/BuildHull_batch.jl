@@ -1,25 +1,26 @@
-# loading package
+# it only uses Gurobi 8.0
 
 #loading function
-include("BuildHullPhase1.jl")
-include("BuildHullPhase2.jl")
+include("BuildHull.jl")
 
-fileName = "5-2-100_01"
-# for a filename a-b-c-d.csv, a is the dimension, b is the number of inpput, c is the scale and d is the density
-data = readcsv("$fileName.csv") # data source.
-theFrame = runDula(data, 2, 3, fileName) # "warm up", the performance is not recorded
-writecsv("dulaFrame$fileName.csv")
-runComputationGurobi(fileName, 2, 3) # "warm up", the performance is not recorded
+rootPath = "your file path"
+# warm up
+runBuildHull("test", 2, 3, rootPath)
+runBuildHull("test", 2, 3, rootPath)
 
-# formally begins
-fileName = "5-2-100k_01"
-data = readcsv("$fileName.csv") # data source.
-theFrame = runDula(data, 2, 3, fileName) #phase 1
-writecsv("dulaFrame$fileName.csv")
-runComputationGurobi(fileName, 2, 3) #phase 2
+# computation begins
+runBuildHull("5-2-100k_01", 2, 3, rootPath)
+runBuildHull("5-2-100k_10", 2, 3, rootPath)
+runBuildHull("5-2-100k_25", 2, 3, rootPath)
 
-fileName = "20-10-100k_25"
-data = readcsv("$fileName.csv") # data source.
-theFrame = runDula(data, 10, 10, fileName) #phase 1
-writecsv("dulaFrame$fileName.csv")
-runComputationGurobi(fileName, 10, 10) #phase 2
+runBuildHull("10-5-100k_01", 5, 5, rootPath)
+runBuildHull("10-5-100k_10", 5, 5, rootPath)
+runBuildHull("10-5-100k_25", 5, 5, rootPath)
+
+runBuildHull("15-7-100k_01", 7, 8, rootPath)
+runBuildHull("15-7-100k_10", 7, 8, rootPath)
+runBuildHull("15-7-100k_25", 7, 8, rootPath)
+
+runBuildHull("20-10-100k_01", 10, 10, rootPath)
+runBuildHull("20-10-100k_10", 10, 10, rootPath)
+runBuildHull("20-10-100k_25", 10, 10, rootPath)
